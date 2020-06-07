@@ -1,0 +1,186 @@
+Part 1: MPG Regression
+---------------------------------------------------------------------
+Which variables/coefficients provided a non-random amount of variance to the mpg values in the dataset?
+
+To determine the variables which predict the MechaCar prototypes' miles per gallon (mpg), exploratory analysis of multiple linear regression was conducted. The findings are as follows:
+
+      Coefficients:
+                         Estimate Std. Error t value Pr(>|t|)    
+      (Intercept)      -1.040e+02  1.585e+01  -6.559 5.08e-08 ***
+      vehicle.length    6.267e+00  6.553e-01   9.563 2.60e-12 ***
+      vehicle.weight    1.245e-03  6.890e-04   1.807   0.0776 .  
+      spoiler.angle     6.877e-02  6.653e-02   1.034   0.3069    
+      ground.clearance  3.546e+00  5.412e-01   6.551 5.21e-08 ***
+      AWD              -3.411e+00  2.535e+00  -1.346   0.1852    
+      ---
+      Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Based on the above analysis, the coefficients for the variables vehicle.length and ground.clearance provide a non-random amount of variance to the mpg values in the dataset. The respective p-values for the variables vehicle.length and ground.clearance are well below 0.05; therefore, the probability of these results being incorrect is substantially less than 5%. 
+
+The variables vehicle.length and ground.clearance were therefore selected to be included in multiple linear regression to predict mpg.
+
+Is the slope of the linear model considered to be zero? Why or why not?
+
+      Null hypothesis: Vehicle length and ground clearance are not each able to predict mpg. (i.e. slope = 0)
+      
+      Alternate hypothesis: Vehicle length and ground clearance are each able to predict mpg. (i.e. slope is not 0)
+
+Running a multiple linear regression using the variables vehicle.length and ground.clearance to predict mpg yields the following results:
+
+      Residuals:
+          Min      1Q  Median      3Q     Max 
+      -17.493  -7.705   1.344   6.642  18.500 
+      
+      Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)    
+      (Intercept)      -91.5573    13.9649  -6.556 3.86e-08 ***
+      vehicle.length     6.0811     0.6732   9.033 7.68e-12 ***
+      ground.clearance   3.5669     0.5401   6.604 3.26e-08 ***
+      ---
+      Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+      
+      Residual standard error: 9.078 on 47 degrees of freedom
+      Multiple R-squared:  0.674,	Adjusted R-squared:  0.6601 
+      F-statistic: 48.59 on 2 and 47 DF,  p-value: 3.637e-12
+         
+The multiple linear regression yields slope values of 6.081 and 3.567. The slope is not considered to be zero since the p-values for each of these variables was well below 0.05.
+
+This means the null hypothesis can be rejected, and it can be concluded that vehicle length and ground clearance are both good predictors of mpg.
+
+Does this linear model predict mpg of MechaCar prototypes effectively? Why or why not?
+
+With an Adjusted R-squared value of 0.66, approximately 66% of the variance found in mpg can be explained by the variables vehicle length and ground clearance. This model fits well, considering there are other factors which could influence mpg which have not been included in the dataset. To improve upon this model's fit for predicting mpg, those other factors would need to be identified and included as part of the multiple linear regression.
+
+
+
+Part 2: Suspension Coil Summary
+---------------------------------------------------------------------
+The design specifications for the MechaCar suspension coils dictate that the variance of the suspension coils must not exceed 100 pounds per inch. Does the current manufacturing data meet this design specification? Why or why not?
+
+The following is the output of the function stat.desc() (from the pastecs library) run on the pounds per inch (PSI) variable:
+
+        nbr.val     nbr.null       nbr.na          min          max 
+   1.500000e+02 0.000000e+00 1.452000e+03 1.542000e+03 
+
+          range          sum       median         mean      SE.mean 
+   9.000000e+01 2.248170e+05 1.500000e+03 1.498780e+03 6.444303e-01 
+
+   CI.mean.0.95          var      std.dev     coef.var 
+   1.273403e+00 6.229356e+01 7.892627e+00 5.266034e-03 
+
+With a variance of 62.29 of the suspension coils, the current manufacturing data meets the design specification that dictates that the variance should not exceed 100 pounds per inch.
+
+
+
+Part 3: Suspension Coil T-Test
+---------------------------------------------------------------------
+Determine if the suspension coil's pound-per-inch results are statistically different from the mean population results of 1,500 pounds per inch.
+
+      Null hypothesis: The PSI mean from the Suspension Coil data is equal to the mean population results of 1,500
+      
+      Alternate hypothesis: The PSI mean from the Suspension Coil data is not equal to the mean population results of 1,500
+
+To begin the analysis, a one sample t-test was conducted on the entire suspension coil dataset. The following are the results:
+
+         data:  suspension_coil$PSI
+         t = -1.8931, df = 149, p-value = 0.06028
+         alternative hypothesis: true mean is not equal to 1500
+         95 percent confidence interval:
+          1497.507 1500.053
+         sample estimates:
+         mean of x 
+           1498.78 
+
+With a p-value of 0.060, there is insufficient evidence to reject the null hypothesis at a 95% confidence interval (which requires the p-value to be less than or equal to 0.05). Therefore, the mean of the PSI from the suspension coil dataset is not statistically different from the population mean. Also, with the p-value higher than 0.05, it cannot be concluded whether or not the suspension coil data sample is actually representative of the population.
+
+Since a p-value of 0.060 is somewhat close to 0.05 and there are 3 lots from which the suspension coil data was obtained, one sample t-tests were completed for each of the lots to determine if any of the data obtained from a given lot could be deemed to have a statistically different mean from the population's mean.
+
+The following are the results for Lot 1:
+
+         data:  subset(suspension_coil, Manufacturing_Lot == "Lot1")$PSI
+         t = 0, df = 49, p-value = 1
+         alternative hypothesis: true mean is not equal to 1500
+         95 percent confidence interval:
+          1499.719 1500.281
+         sample estimates:
+         mean of x 
+              1500 
+
+With a p-value of 1, there is insufficient evidence to reject the null hypothesis at a 95% confidence interval. Therefore, the mean of the PSI from the Lot 1 subset of the suspension coil dataset is not statistically different from the population mean. With a p-value larger than 0.05, it cannot be concluded whether or not the Lot 1 sample is actually representative of the population.
+
+
+The following are the results for Lot 2:
+
+         data:  subset(suspension_coil, Manufacturing_Lot == "Lot2")$PSI
+         t = 0.51745, df = 49, p-value = 0.6072
+         alternative hypothesis: true mean is not equal to 1500
+         95 percent confidence interval:
+          1499.423 1500.977
+         sample estimates:
+         mean of x 
+            1500.2 
+
+With a p-value of 0.61, there is insufficient evidence to reject the null hypothesis at a 95% confidence interval. Therefore, the mean of the PSI from the Lot 2 subset of the suspension coil dataset is not statistically different from the population mean. With a p-value larger than 0.05, it cannot be concluded whether or not the Lot 2 sample is actually representative of the population.
+
+The following are the results for Lot 3:
+         data:  subset(suspension_coil, Manufacturing_Lot == "Lot3")$PSI
+         t = -2.0916, df = 49, p-value = 0.04168
+         alternative hypothesis: true mean is not equal to 1500
+         95 percent confidence interval:
+          1492.431 1499.849
+         sample estimates:
+         mean of x 
+           1496.14
+
+With a p-value of 0.042, there is sufficient evidence to reject the null hypothesis at a 95% confidence interval. Therefore, the mean of the PSI from the Lot 3 subset of the suspension coil dataset is statistically different from the population mean. This implies that the Lot 3 data is not representative of the population since the means are different and the p-value is low enough to be confident that these results were not due to chance.
+
+
+
+Part 4: Study Design
+---------------------------------------------------------------------
+Study design: MechaCar is already planning for its next lot of prototypes, and the company is looking to boost safety ratings for the new models. So that the design teams can focus their efforts appropriately, MechaCar wants to understand which factors are best at predicting safety rating. To determine this, a multiple linear regression model that predicts vehicle safety rating of the MechaCar prototypes and competitor vehicles will be created using a number of variables.
+
+The study will require the following data for MechaCar and all of its competitors:
+- Safety ratings
+- Vehicle cost
+- Vehicle weight
+- Vehicle length
+- Ground clearance
+- Braking distance
+- 0 to 60mph
+
+The above variables would be of interest to developers as well as consumers. consumers would have a vested interest in buying vehicles that are safe so they can benefit from the safety features and reduced insurance premiums. Each of these quantifiable variables would be of interest to consumers for a variety of reasons; however, this study will focus on their effect on safety rating. This study assumes that customers prefer vehicles which have higher safety ratings to those with lower safety ratings.
+ 
+This study will attempt to answer the following questions:
+- Which variables provide a statistically significant amount of variance to the safety ratings?
+- Is the slope of the linear model predicting vehicle safety rating considered to be zero?
+
+Step 1: Exploratory analysis using multiple linear regression of vehicle cost, vehicle weight, vehicle length, ground clearance, breaking distance, and 0 to 60 mph to predict vehicle safety rating.
+
+Null hypothesis: Safety ratings are not affected by any of the following variables: vehicle cost, vehicle weight, vehicle length, ground clearance, breaking distance, and 0 to 60 mph.
+
+Alternate hypothesis: Safety ratings are affected by one or more of the following variables: vehicle cost, vehicle weight, vehicle length, ground clearance, breaking distance, and 0 to 60 mph.
+
+Complete the following steps:
+a. Run the multiple linear regression.
+b. Identify the variables where the calculation of coefficient is significant such that p-value < 0.01.
+   (NOTE: A 99% confidence interval has been selected because safety is particularly important, and the company is only willing to be wrong 1% of the time).
+
+Interpretation of results:
+- If the p-value related to the calculated coefficients for any of the variables is less than 0.01, then the null hypothesis can be rejected. This means that one or more variables listed above indeed predicts safety rating.
+- If it is the case that the null hypothesis cannot be rejected obtain more data (i.e. different variables) and rerun the exploratory analysis. This approach is being followed since management is keen on identifying which factors can actually predict safety rating. Failure to reject the null hypothesis would mean that the study failed to identify any variables that affect safety rating.
+
+Step 2: Multiple linear regression of the statistically significant variables
+Note: This step assumes that the null hypothesis in step 1 has been rejected.
+
+Null hypothesis: The variables identified in step one are not able to predict safety rating. (i.e. The slope of the linear model predicting vehicle safety rating is equal to zero).
+
+Alternate hypothesis: The variables identified in step one are able to predict safety rating. (i.e. The slope of the linear model predicting vehicle safety rating is not equal to zero).
+
+Complete the following steps:
+a. Run the multiple linear regression using only the variables identified in Step 1.
+b. Identify the values for the variables' respective coefficients (where p-value < 0.01).
+
+Interpretation of results:
+- The coefficient values are the slope values. If p-value < 0.01, the slope value is statistically significant, and the null hypothesis can be rejected.
+- The effectiveness of the multiple linear regression model at predicting vehicle safety rating will be evaluated against the adjusted R-squared value. The closer the value of adjusted R-squared is to 1, the better it is at predicting vehicle safety rating. A value of 0.70 or higher would impress upper management, as it would entail that the factors included account for 70% of the predictability of vehicle safety rating.
